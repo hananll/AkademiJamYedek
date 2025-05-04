@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Surukleme : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
@@ -9,6 +9,12 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private Canvas canvas;
 
     private bool canDrag = true;
+    private bool previouslyOnPizza = false;
+
+    [Header("Tabağa dönüş alanı (IngredientPlate)")]
+    public Transform plateParent;
+    [Header("Drop hedefi (PizzaHamuru)")]
+    public Transform dropTargetParent;
 
     private void Awake()
     {
@@ -19,15 +25,26 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (!IngredientManager.Instance.CanAddIngredient())
+        originalParent = transform.parent;
+
+        previouslyOnPizza = (originalParent == dropTargetParent);
+
+        // Eğer pizza üstündeyse ve geri alınacaksa, sayacı azalt
+        if (previouslyOnPizza)
         {
-            canDrag = false;
-            return;
+            IngredientManager.Instance.RemoveIngredient();
+        }
+        else
+        {
+            // Yeni bir ekleme yapılacaksa sınırı kontrol et
+            if (!IngredientManager.Instance.CanAddIngredient())
+            {
+                canDrag = false;
+                return;
+            }
         }
 
         canDrag = true;
-
-        originalParent = transform.parent;
         transform.SetParent(canvas.transform);
         canvasGroup.blocksRaycasts = false;
     }
@@ -35,7 +52,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public void OnDrag(PointerEventData eventData)
     {
         if (!canDrag) return;
-
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
@@ -43,9 +59,25 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         if (!canDrag) return;
 
-        transform.SetParent(originalParent);
-        canvasGroup.blocksRaycasts = true;
+        GameObject dropObject = eventData.pointerCurrentRaycast.gameObject;
 
-        IngredientManager.Instance.AddIngredient(); // Sayaç arttır
+        if (dropObject != null && dropObject.transform == dropTargetParent)
+        {
+            // Pizza üstüne bırakıldıysa ve orijinal yeri pizza değilse sayaç artır
+            transform.SetParent(dropTargetParent);
+
+            if (!previouslyOnPizza)
+            {
+                IngredientManager.Instance.AddIngredient();
+            }
+        }
+        else
+        {
+            // Tabağa dönerse oraya koy
+            transform.SetParent(originalParent);
+            transform.SetAsLastSibling(); // ✔️ Domatesin önde görünmesini sağlar
+        }
+
+        canvasGroup.blocksRaycasts = true;
     }
 }
