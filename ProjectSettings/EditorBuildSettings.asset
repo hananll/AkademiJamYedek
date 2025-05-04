@@ -6,9 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Start.unity
+    guid: 12d113bd845583b4ea572405b30c4bdd
+  - enabled: 1
+    path: Assets/Scenes/StoryScene.unity
+    guid: f7ff3ee00d372814286a10a3927ca502
+  - enabled: 1
     path: Assets/Scenes/SiparisHazirlamaEkrani.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/FirinEkrani.unity
     guid: 3a4120cc1dc7ac4459ecefc3d0d01a7c
+  - enabled: 1
+    path: Assets/Scenes/KesmeEkrani.unity
+    guid: 148f91d5f40ab45408eb377977da7e76
   m_configObjects: {}

@@ -6,6 +6,8 @@ public class Birakma : MonoBehaviour, IDropHandler
     public Transform pizzaUstuPaneli;      // Pizza'nın üstündeki UI alanı
     public GameObject domatesPrefab;       // Pizza üstüne eklenecek domates prefab
 
+    
+
     public void OnDrop(PointerEventData eventData)
     {
         GameObject suruklenenDomates = eventData.pointerDrag;
@@ -35,6 +37,8 @@ public class Birakma : MonoBehaviour, IDropHandler
 
             // Orijinal domatesi yok et (tabaktan eksilsin)
             Destroy(suruklenenDomates);
+
+            
         }
     }
 }

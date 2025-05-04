@@ -10,6 +10,10 @@ public class FırınEkranınaGeçiş : MonoBehaviour
     {
         SceneManager.LoadScene(1); 
     }
+    public void KesmeTahtasiSahnesineGit()
+    {
+        SceneManager.LoadScene("KesmeEkrani");
+    }
 }
 
 
