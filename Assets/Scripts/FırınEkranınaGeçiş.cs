@@ -8,11 +8,11 @@ public class FırınEkranınaGeçiş : MonoBehaviour
   
     public void FirinSahnesineGit()
     {
-        SceneManager.LoadScene(1); 
+        SceneManager.LoadScene(3); 
     }
     public void KesmeTahtasiSahnesineGit()
     {
-        SceneManager.LoadScene("KesmeEkrani");
+        SceneManager.LoadScene(4);
     }
 }
 
